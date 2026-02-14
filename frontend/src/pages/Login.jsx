@@ -6,13 +6,18 @@ function Login({ onLogin }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isStudent, setIsStudent] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     if (isStudent) {
-      onLogin({ role: 'student' }, null);
+      setTimeout(() => {
+        onLogin({ role: 'student' }, null);
+        setLoading(false);
+      }, 500);
       return;
     }
 
@@ -21,6 +26,8 @@ function Login({ onLogin }) {
       onLogin(data.teacher, data.token);
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -35,12 +42,14 @@ function Login({ onLogin }) {
           <button 
             className={`tab ${!isStudent ? 'active' : ''}`}
             onClick={() => setIsStudent(false)}
+            type="button"
           >
             Teacher Login
           </button>
           <button 
             className={`tab ${isStudent ? 'active' : ''}`}
             onClick={() => setIsStudent(true)}
+            type="button"
           >
             Student View
           </button>
@@ -55,6 +64,7 @@ function Login({ onLogin }) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={loading}
               />
             </div>
             <div className="form-group">
@@ -64,11 +74,23 @@ function Login({ onLogin }) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={loading}
               />
             </div>
             {error && <p style={{ color: 'red', marginBottom: '16px' }}>{error}</p>}
-            <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
-              Login as Teacher
+            <button 
+              type="submit" 
+              className="btn btn-primary" 
+              style={{ width: '100%' }}
+              disabled={loading}
+            >
+              {loading ? (
+                <span>
+                  <span className="spinner"></span> Logging in...
+                </span>
+              ) : (
+                'Login as Teacher'
+              )}
             </button>
           </form>
         ) : (
@@ -80,8 +102,15 @@ function Login({ onLogin }) {
               onClick={handleSubmit} 
               className="btn btn-primary" 
               style={{ width: '100%' }}
+              disabled={loading}
             >
-              Enter as Student
+              {loading ? (
+                <span>
+                  <span className="spinner"></span> Loading...
+                </span>
+              ) : (
+                'Enter as Student'
+              )}
             </button>
           </div>
         )}

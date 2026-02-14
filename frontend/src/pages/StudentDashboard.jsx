@@ -7,6 +7,7 @@ import Charts from '../components/Charts';
 function StudentDashboard({ onLogout, user }) {
   const [teams, setTeams] = useState([]);
   const [phase, setPhase] = useState('all');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,12 +16,15 @@ function StudentDashboard({ onLogout, user }) {
 
   const fetchTeams = async () => {
     try {
+      setLoading(true);
       const { data } = phase === 'all' ? 
         await getTeams() : 
         await getTeamsByPhase(phase);
       setTeams(data);
     } catch (error) {
       console.error('Error fetching teams:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -43,31 +47,44 @@ function StudentDashboard({ onLogout, user }) {
           <button 
             className={`tab ${phase === 'all' ? 'active' : ''}`}
             onClick={() => setPhase('all')}
+            disabled={loading}
           >
             All Teams
           </button>
           <button 
             className={`tab ${phase === 'Phase 1' ? 'active' : ''}`}
             onClick={() => setPhase('Phase 1')}
+            disabled={loading}
           >
             Phase 1
           </button>
           <button 
             className={`tab ${phase === 'Phase 2' ? 'active' : ''}`}
             onClick={() => setPhase('Phase 2')}
+            disabled={loading}
           >
             Phase 2
           </button>
           <button 
             className={`tab ${phase === 'total' ? 'active' : ''}`}
             onClick={() => setPhase('total')}
+            disabled={loading}
           >
             Total Score
           </button>
         </div>
 
-        <Leaderboard teams={teams} phase={phase} />
-        <Charts teams={teams} phase={phase} />
+        {loading ? (
+          <div className="card" style={{ textAlign: 'center', padding: '60px 20px' }}>
+            <div className="spinner-large"></div>
+            <p style={{ marginTop: '20px', color: '#64748b' }}>Loading leaderboard...</p>
+          </div>
+        ) : (
+          <>
+            <Leaderboard teams={teams} phase={phase} />
+            <Charts teams={teams} phase={phase} />
+          </>
+        )}
       </div>
     </div>
   );

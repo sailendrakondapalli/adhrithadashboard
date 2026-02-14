@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function TeamForm({ onSubmit, initialData, onCancel }) {
+function TeamForm({ onSubmit, initialData, onCancel, loading }) {
   const [formData, setFormData] = useState({
     teamName: '',
     phase: 'Phase 1',
@@ -37,6 +37,7 @@ function TeamForm({ onSubmit, initialData, onCancel }) {
           onChange={(e) => setFormData({ ...formData, teamName: e.target.value })}
           required
           placeholder="Enter team name (same for both phases)"
+          disabled={loading}
         />
       </div>
       
@@ -45,6 +46,7 @@ function TeamForm({ onSubmit, initialData, onCancel }) {
         <select
           value={formData.phase}
           onChange={(e) => setFormData({ ...formData, phase: e.target.value })}
+          disabled={loading}
         >
           <option value="Phase 1">Phase 1</option>
           <option value="Phase 2">Phase 2</option>
@@ -59,6 +61,7 @@ function TeamForm({ onSubmit, initialData, onCancel }) {
           onChange={(e) => setFormData({ ...formData, marks: Number(e.target.value) })}
           required
           min="0"
+          disabled={loading}
         />
       </div>
 
@@ -69,15 +72,33 @@ function TeamForm({ onSubmit, initialData, onCancel }) {
           onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
           rows="3"
           placeholder="Optional feedback or comments"
+          disabled={loading}
         />
       </div>
 
-      <div style={{ display: 'flex', gap: '10px' }}>
-        <button type="submit" className="btn btn-primary">
-          {initialData ? 'Update' : 'Add'} Team
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button 
+          type="submit" 
+          className="btn btn-primary" 
+          disabled={loading}
+          style={{ flex: '1', minWidth: '120px' }}
+        >
+          {loading ? (
+            <span>
+              <span className="spinner"></span> {initialData ? 'Updating...' : 'Adding...'}
+            </span>
+          ) : (
+            <span>{initialData ? 'Update' : 'Add'} Team</span>
+          )}
         </button>
         {initialData && (
-          <button type="button" onClick={onCancel} className="btn btn-secondary">
+          <button 
+            type="button" 
+            onClick={onCancel} 
+            className="btn btn-secondary"
+            disabled={loading}
+            style={{ flex: '1', minWidth: '120px' }}
+          >
             Cancel
           </button>
         )}
