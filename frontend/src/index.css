@@ -16,12 +16,25 @@ body {
   padding: 20px;
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+}
+
 .card {
   background: white;
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 16px;
+    border-radius: 8px;
+  }
 }
 
 .btn {
@@ -32,6 +45,13 @@ body {
   font-size: 14px;
   font-weight: 600;
   transition: all 0.3s;
+}
+
+@media (max-width: 768px) {
+  .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
 }
 
 .btn-primary {
@@ -90,9 +110,15 @@ body {
   50% { transform: scale(1.02); }
 }
 
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .leaderboard-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 600px;
 }
 
 .leaderboard-table th,
@@ -106,6 +132,15 @@ body {
   background: #f8fafc;
   font-weight: 600;
   color: #334155;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 8px;
+    font-size: 14px;
+  }
 }
 
 .navbar {
@@ -116,12 +151,25 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 12px 16px;
+  }
+  
+  .navbar h2 {
+    font-size: 18px;
+  }
 }
 
 .tabs {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .tab {
@@ -132,9 +180,19 @@ body {
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s;
+  flex: 1;
+  min-width: 100px;
 }
 
 .tab.active {
   background: #667eea;
   color: white;
+}
+
+@media (max-width: 768px) {
+  .tab {
+    padding: 8px 12px;
+    font-size: 14px;
+    min-width: auto;
+  }
 }

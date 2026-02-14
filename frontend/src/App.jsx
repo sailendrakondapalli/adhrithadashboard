@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Login from './pages/Login';
 import TeacherDashboard from './pages/TeacherDashboard';
 import StudentDashboard from './pages/StudentDashboard';
@@ -16,7 +16,9 @@ function App() {
   }, []);
 
   const handleLogin = (userData, token) => {
-    localStorage.setItem('token', token);
+    if (token) {
+      localStorage.setItem('token', token);
+    }
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
   };
@@ -39,8 +41,8 @@ function App() {
           <TeacherDashboard user={user} onLogout={handleLogout} /> : 
           <Navigate to="/login" />
         } />
-        <Route path="/student" element={<StudentDashboard onLogout={handleLogout} />} />
-        <Route path="/" element={<Navigate to="/student" />} />
+        <Route path="/student" element={<StudentDashboard onLogout={handleLogout} user={user} />} />
+        <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
   );

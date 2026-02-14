@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getTeams, getTeamsByPhase } from '../services/api';
 import Leaderboard from '../components/Leaderboard';
 import Charts from '../components/Charts';
 
-function StudentDashboard({ onLogout }) {
+function StudentDashboard({ onLogout, user }) {
   const [teams, setTeams] = useState([]);
   const [phase, setPhase] = useState('all');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchTeams();
@@ -22,11 +24,18 @@ function StudentDashboard({ onLogout }) {
     }
   };
 
+  const handleLogout = () => {
+    if (onLogout) {
+      onLogout();
+    }
+    navigate('/login');
+  };
+
   return (
     <div>
       <div className="navbar">
         <h2>🎓 Student Dashboard</h2>
-        {onLogout && <button onClick={onLogout} className="btn btn-secondary">Logout</button>}
+        <button onClick={handleLogout} className="btn btn-secondary">Logout</button>
       </div>
       
       <div className="container">
@@ -49,9 +58,15 @@ function StudentDashboard({ onLogout }) {
           >
             Phase 2
           </button>
+          <button 
+            className={`tab ${phase === 'total' ? 'active' : ''}`}
+            onClick={() => setPhase('total')}
+          >
+            Total Score
+          </button>
         </div>
 
-        <Leaderboard teams={teams} />
+        <Leaderboard teams={teams} phase={phase} />
         <Charts teams={teams} phase={phase} />
       </div>
     </div>
