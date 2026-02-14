@@ -1,0 +1,14 @@
+{
+  "name": "hackathon-dashboard",
+  "version": "1.0.0",
+  "description": "Full-stack Hackathon Evaluation Dashboard",
+  "scripts": {
+    "install-all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "start-backend": "cd backend && npm start",
+    "start-frontend": "cd frontend && npm run dev"
+  },
+  "keywords": ["hackathon", "evaluation", "dashboard"],
+  "author": "",
+  "license": "MIT"
+}
