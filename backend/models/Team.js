@@ -10,4 +10,7 @@ const teamSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+// Compound index to ensure one entry per team per phase per room
+teamSchema.index({ teamName: 1, room: 1, phase: 1 }, { unique: true });
+
 export default mongoose.model('Team', teamSchema);

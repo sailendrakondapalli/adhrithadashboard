@@ -22,7 +22,9 @@ function TeamForm({ onSubmit, initialData, onCancel }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
-    setFormData({ teamName: '', phase: 'Phase 1', marks: 0, remarks: '' });
+    if (!initialData) {
+      setFormData({ teamName: '', phase: 'Phase 1', marks: 0, remarks: '' });
+    }
   };
 
   return (
@@ -34,7 +36,7 @@ function TeamForm({ onSubmit, initialData, onCancel }) {
           value={formData.teamName}
           onChange={(e) => setFormData({ ...formData, teamName: e.target.value })}
           required
-          disabled={!!initialData}
+          placeholder="Enter team name (same for both phases)"
         />
       </div>
       
@@ -43,7 +45,6 @@ function TeamForm({ onSubmit, initialData, onCancel }) {
         <select
           value={formData.phase}
           onChange={(e) => setFormData({ ...formData, phase: e.target.value })}
-          disabled={!!initialData}
         >
           <option value="Phase 1">Phase 1</option>
           <option value="Phase 2">Phase 2</option>
@@ -67,6 +68,7 @@ function TeamForm({ onSubmit, initialData, onCancel }) {
           value={formData.remarks}
           onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
           rows="3"
+          placeholder="Optional feedback or comments"
         />
       </div>
 
