@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { connectDB } from './config/db.js';
 import authRoutes from './routes/auth.js';
 import teamRoutes from './routes/teams.js';
+import Team from './models/Team.js';
 
 dotenv.config();
 
@@ -20,6 +21,13 @@ app.use(express.json());
 
 // Connect to MongoDB
 connectDB();
+
+// Ensure indexes are created
+Team.createIndexes().then(() => {
+  console.log('Team indexes created');
+}).catch(err => {
+  console.error('Error creating indexes:', err);
+});
 
 // Routes
 app.use('/api/auth', authRoutes);

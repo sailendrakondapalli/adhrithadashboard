@@ -12,13 +12,16 @@ const teamSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-// Compound index to ensure one team per room
+// Compound unique index to prevent duplicate teams in same room
 teamSchema.index({ teamName: 1, room: 1 }, { unique: true });
 
 // Auto-calculate total marks before saving
 teamSchema.pre('save', function(next) {
-  this.totalMarks = this.phase1Marks + this.phase2Marks;
+  this.totalMarks = (this.phase1Marks || 0) + (this.phase2Marks || 0);
   next();
 });
+
+// Ensure indexes are created
+teamSchema.set('autoIndex', true);
 
 export default mongoose.model('Team', teamSchema);
