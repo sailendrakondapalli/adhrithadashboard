@@ -21,11 +21,15 @@ router.post('/', protect, async (req, res) => {
   try {
     const { teamName } = req.body;
     
-    // Check if team already exists (across all rooms)
-    const existingTeam = await Team.findOne({ teamName });
+    // Check if team already exists (case-insensitive)
+    const existingTeam = await Team.findOne({ 
+      teamName: { $regex: new RegExp(`^${teamName}$`, 'i') }
+    });
 
     if (existingTeam) {
-      return res.status(400).json({ message: 'Team name already exists. Please choose a different name.' });
+      return res.status(400).json({ 
+        message: `Team name already exists as "${existingTeam.teamName}". Please choose a different name.` 
+      });
     }
 
     const team = await Team.create({
