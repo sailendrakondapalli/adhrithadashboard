@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getTeams, getTeamsByPhase } from '../services/api';
+import { getTeams } from '../services/api';
 import Leaderboard from '../components/Leaderboard';
 import Charts from '../components/Charts';
 
 function StudentDashboard({ onLogout, user }) {
   const [teams, setTeams] = useState([]);
-  const [phase, setPhase] = useState('all');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchTeams();
-  }, [phase]);
+  }, []);
 
   const fetchTeams = async () => {
     try {
       setLoading(true);
-      const { data } = phase === 'all' ? 
-        await getTeams() : 
-        await getTeamsByPhase(phase);
+      const { data } = await getTeams();
       setTeams(data);
     } catch (error) {
       console.error('Error fetching teams:', error);
@@ -43,37 +40,6 @@ function StudentDashboard({ onLogout, user }) {
       </div>
       
       <div className="container">
-        <div className="tabs">
-          <button 
-            className={`tab ${phase === 'all' ? 'active' : ''}`}
-            onClick={() => setPhase('all')}
-            disabled={loading}
-          >
-            All Teams
-          </button>
-          <button 
-            className={`tab ${phase === 'Phase 1' ? 'active' : ''}`}
-            onClick={() => setPhase('Phase 1')}
-            disabled={loading}
-          >
-            Phase 1
-          </button>
-          <button 
-            className={`tab ${phase === 'Phase 2' ? 'active' : ''}`}
-            onClick={() => setPhase('Phase 2')}
-            disabled={loading}
-          >
-            Phase 2
-          </button>
-          <button 
-            className={`tab ${phase === 'total' ? 'active' : ''}`}
-            onClick={() => setPhase('total')}
-            disabled={loading}
-          >
-            Total Score
-          </button>
-        </div>
-
         {loading ? (
           <div className="card" style={{ textAlign: 'center', padding: '60px 20px' }}>
             <div className="spinner-large"></div>
@@ -81,8 +47,8 @@ function StudentDashboard({ onLogout, user }) {
           </div>
         ) : (
           <>
-            <Leaderboard teams={teams} phase={phase} />
-            <Charts teams={teams} phase={phase} />
+            <Leaderboard teams={teams} />
+            <Charts teams={teams} />
           </>
         )}
       </div>

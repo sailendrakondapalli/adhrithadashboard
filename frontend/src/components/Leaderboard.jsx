@@ -1,41 +1,10 @@
 import React from 'react';
 
-function Leaderboard({ teams, phase }) {
-  // Calculate total scores if phase is 'total'
-  const processedTeams = phase === 'total' ? calculateTotalScores(teams) : teams;
-  
-  const sortedTeams = [...processedTeams].sort((a, b) => {
-    if (b.marks !== a.marks) return b.marks - a.marks;
+function Leaderboard({ teams }) {
+  const sortedTeams = [...teams].sort((a, b) => {
+    if (b.totalMarks !== a.totalMarks) return b.totalMarks - a.totalMarks;
     return a.teamName.localeCompare(b.teamName);
   });
-
-  function calculateTotalScores(teams) {
-    const teamMap = {};
-    
-    teams.forEach(team => {
-      if (!teamMap[team.teamName]) {
-        teamMap[team.teamName] = {
-          teamName: team.teamName,
-          room: team.room,
-          phase: 'Total',
-          marks: 0,
-          phase1: 0,
-          phase2: 0,
-          remarks: ''
-        };
-      }
-      
-      if (team.phase === 'Phase 1') {
-        teamMap[team.teamName].phase1 = team.marks;
-      } else if (team.phase === 'Phase 2') {
-        teamMap[team.teamName].phase2 = team.marks;
-      }
-      
-      teamMap[team.teamName].marks = teamMap[team.teamName].phase1 + teamMap[team.teamName].phase2;
-    });
-    
-    return Object.values(teamMap);
-  }
 
   return (
     <div className="card">
@@ -47,37 +16,39 @@ function Leaderboard({ teams, phase }) {
               <th>Rank</th>
               <th>Team Name</th>
               <th>Room</th>
-              <th>Phase</th>
-              {phase === 'total' && (
-                <>
-                  <th>Phase 1</th>
-                  <th>Phase 2</th>
-                </>
-              )}
-              <th>Marks</th>
-              {phase !== 'total' && <th>Remarks</th>}
+              <th>Phase 1</th>
+              <th>Phase 2</th>
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>
             {sortedTeams.map((team, index) => (
-              <tr key={team._id || team.teamName} className={index < 3 ? 'top-3' : ''}>
+              <tr key={team._id} className={index < 3 ? 'top-3' : ''}>
                 <td>
                   {index === 0 && '🥇'}
                   {index === 1 && '🥈'}
                   {index === 2 && '🥉'}
                   {index > 2 && index + 1}
                 </td>
-                <td>{team.teamName}</td>
+                <td><strong>{team.teamName}</strong></td>
                 <td>{team.room}</td>
-                <td>{team.phase}</td>
-                {phase === 'total' && (
-                  <>
-                    <td>{team.phase1}</td>
-                    <td>{team.phase2}</td>
-                  </>
-                )}
-                <td><strong>{team.marks}</strong></td>
-                {phase !== 'total' && <td>{team.remarks}</td>}
+                <td>
+                  {team.phase1Marks}
+                  {team.phase1Remarks && (
+                    <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
+                      {team.phase1Remarks}
+                    </div>
+                  )}
+                </td>
+                <td>
+                  {team.phase2Marks}
+                  {team.phase2Remarks && (
+                    <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
+                      {team.phase2Remarks}
+                    </div>
+                  )}
+                </td>
+                <td><strong style={{ fontSize: '18px', color: '#667eea' }}>{team.totalMarks}</strong></td>
               </tr>
             ))}
           </tbody>

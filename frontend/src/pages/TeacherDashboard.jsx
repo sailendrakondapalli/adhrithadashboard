@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { getTeams, createTeam, updateTeam } from '../services/api';
-import Leaderboard from '../components/Leaderboard';
-import TeamForm from '../components/TeamForm';
+import { getTeams, createTeam, updatePhase1, updatePhase2, deleteTeam } from '../services/api';
+import AddTeamForm from '../components/AddTeamForm';
+import UpdateMarksModal from '../components/UpdateMarksModal';
 
 function TeacherDashboard({ user, onLogout }) {
   const [teams, setTeams] = useState([]);
-  const [editingTeam, setEditingTeam] = useState(null);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [modalTeam, setModalTeam] = useState(null);
+  const [modalPhase, setModalPhase] = useState(null);
 
   useEffect(() => {
     fetchTeams();
@@ -25,22 +26,53 @@ function TeacherDashboard({ user, onLogout }) {
     }
   };
 
-  const handleSubmit = async (formData) => {
+  const handleAddTeam = async (formData) => {
     try {
       setLoading(true);
-      if (editingTeam) {
-        await updateTeam(editingTeam._id, formData);
-        setMessage('✅ Team updated successfully!');
-      } else {
-        await createTeam(formData);
-        setMessage('✅ Team marks added successfully!');
-      }
+      await createTeam(formData);
+      setMessage('✅ Team added successfully!');
       fetchTeams();
-      setEditingTeam(null);
       setTimeout(() => setMessage(''), 3000);
     } catch (error) {
-      console.error('Error saving team:', error);
-      setMessage('❌ ' + (error.response?.data?.message || 'Error saving team'));
+      setMessage('❌ ' + (error.response?.data?.message || 'Error adding team'));
+      setTimeout(() => setMessage(''), 3000);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateMarks = async (data) => {
+    try {
+      setLoading(true);
+      if (modalPhase === 1) {
+        await updatePhase1(modalTeam._id, data);
+      } else {
+        await updatePhase2(modalTeam._id, data);
+      }
+      setMessage(`✅ Phase ${modalPhase} marks updated successfully!`);
+      fetchTeams();
+      setModalTeam(null);
+      setModalPhase(null);
+      setTimeout(() => setMessage(''), 3000);
+    } catch (error) {
+      setMessage('❌ ' + (error.response?.data?.message || 'Error updating marks'));
+      setTimeout(() => setMessage(''), 3000);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteTeam = async (teamId, teamName) => {
+    if (!confirm(`Are you sure you want to delete "${teamName}"?`)) return;
+    
+    try {
+      setLoading(true);
+      await deleteTeam(teamId);
+      setMessage('✅ Team deleted successfully!');
+      fetchTeams();
+      setTimeout(() => setMessage(''), 3000);
+    } catch (error) {
+      setMessage('❌ ' + (error.response?.data?.message || 'Error deleting team'));
       setTimeout(() => setMessage(''), 3000);
     } finally {
       setLoading(false);
@@ -68,18 +100,11 @@ function TeacherDashboard({ user, onLogout }) {
         )}
 
         <div className="card">
-          <h3 style={{ marginBottom: '20px' }}>
-            {editingTeam ? 'Edit Team Marks' : 'Add Team Marks'}
-          </h3>
+          <h3 style={{ marginBottom: '20px' }}>Add New Team</h3>
           <p style={{ marginBottom: '16px', color: '#64748b', fontSize: '14px' }}>
-            💡 Tip: Enter the same team name for both Phase 1 and Phase 2. The system will automatically update if the team already exists.
+            💡 First add the team name. Then update Phase 1 and Phase 2 marks separately.
           </p>
-          <TeamForm 
-            onSubmit={handleSubmit} 
-            initialData={editingTeam}
-            onCancel={() => setEditingTeam(null)}
-            loading={loading}
-          />
+          <AddTeamForm onSubmit={handleAddTeam} loading={loading} />
         </div>
 
         <div className="card">
@@ -95,9 +120,9 @@ function TeacherDashboard({ user, onLogout }) {
                 <thead>
                   <tr>
                     <th>Team Name</th>
-                    <th>Phase</th>
-                    <th>Marks</th>
-                    <th>Remarks</th>
+                    <th>Phase 1</th>
+                    <th>Phase 2</th>
+                    <th>Total</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -111,18 +136,40 @@ function TeacherDashboard({ user, onLogout }) {
                   ) : (
                     teams.map(team => (
                       <tr key={team._id}>
-                        <td>{team.teamName}</td>
-                        <td>{team.phase}</td>
-                        <td>{team.marks}</td>
-                        <td>{team.remarks}</td>
+                        <td><strong>{team.teamName}</strong></td>
                         <td>
-                          <button 
-                            onClick={() => setEditingTeam(team)}
-                            className="btn btn-secondary"
-                            style={{ fontSize: '12px', padding: '6px 12px' }}
-                          >
-                            Edit
-                          </button>
+                          {team.phase1Marks}
+                          {team.phase1Remarks && <div style={{ fontSize: '12px', color: '#64748b' }}>{team.phase1Remarks}</div>}
+                        </td>
+                        <td>
+                          {team.phase2Marks}
+                          {team.phase2Remarks && <div style={{ fontSize: '12px', color: '#64748b' }}>{team.phase2Remarks}</div>}
+                        </td>
+                        <td><strong>{team.totalMarks}</strong></td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
+                            <button 
+                              onClick={() => { setModalTeam(team); setModalPhase(1); }}
+                              className="btn btn-secondary"
+                              style={{ fontSize: '11px', padding: '4px 8px' }}
+                            >
+                              Phase 1
+                            </button>
+                            <button 
+                              onClick={() => { setModalTeam(team); setModalPhase(2); }}
+                              className="btn btn-secondary"
+                              style={{ fontSize: '11px', padding: '4px 8px' }}
+                            >
+                              Phase 2
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteTeam(team._id, team.teamName)}
+                              className="btn btn-danger"
+                              style={{ fontSize: '11px', padding: '4px 8px' }}
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))
@@ -133,6 +180,16 @@ function TeacherDashboard({ user, onLogout }) {
           )}
         </div>
       </div>
+
+      {modalTeam && (
+        <UpdateMarksModal
+          team={modalTeam}
+          phase={modalPhase}
+          onSubmit={handleUpdateMarks}
+          onClose={() => { setModalTeam(null); setModalPhase(null); }}
+          loading={loading}
+        />
+      )}
     </div>
   );
 }

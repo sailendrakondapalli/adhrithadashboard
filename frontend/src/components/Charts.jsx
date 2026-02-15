@@ -1,18 +1,27 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-function Charts({ teams, phase }) {
-  const phase1Teams = teams
-    .filter(t => t.phase === 'Phase 1')
-    .sort((a, b) => b.marks - a.marks)
+function Charts({ teams }) {
+  const sortedTeams = [...teams]
+    .sort((a, b) => b.totalMarks - a.totalMarks)
     .slice(0, 10);
 
-  const phase2Teams = teams
-    .filter(t => t.phase === 'Phase 2')
-    .sort((a, b) => b.marks - a.marks)
-    .slice(0, 10);
+  const phase1Data = sortedTeams.map(t => ({
+    teamName: t.teamName,
+    marks: t.phase1Marks
+  })).sort((a, b) => b.marks - a.marks);
 
-  const renderChart = (data, title) => (
+  const phase2Data = sortedTeams.map(t => ({
+    teamName: t.teamName,
+    marks: t.phase2Marks
+  })).sort((a, b) => b.marks - a.marks);
+
+  const totalData = sortedTeams.map(t => ({
+    teamName: t.teamName,
+    marks: t.totalMarks
+  }));
+
+  const renderChart = (data, title, color) => (
     <div className="card" style={{ marginTop: '20px' }}>
       <h3 style={{ marginBottom: '20px' }}>{title}</h3>
       <ResponsiveContainer width="100%" height={300}>
@@ -22,24 +31,17 @@ function Charts({ teams, phase }) {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="marks" fill="#667eea" />
+          <Bar dataKey="marks" fill={color} />
         </BarChart>
       </ResponsiveContainer>
     </div>
   );
 
-  if (phase === 'Phase 1') {
-    return renderChart(phase1Teams, '📊 Phase 1 Results');
-  }
-
-  if (phase === 'Phase 2') {
-    return renderChart(phase2Teams, '📊 Phase 2 Results');
-  }
-
   return (
     <>
-      {phase1Teams.length > 0 && renderChart(phase1Teams, '📊 Phase 1 Results')}
-      {phase2Teams.length > 0 && renderChart(phase2Teams, '📊 Phase 2 Results')}
+      {renderChart(phase1Data, '📊 Phase 1 Results', '#667eea')}
+      {renderChart(phase2Data, '📊 Phase 2 Results', '#764ba2')}
+      {renderChart(totalData, '📊 Total Marks', '#f093fb')}
     </>
   );
 }

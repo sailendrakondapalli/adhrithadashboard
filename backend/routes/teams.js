@@ -8,71 +8,47 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const teams = await Team.find()
-      .populate('evaluatedBy', 'name')
-      .sort({ marks: -1, teamName: 1 });
+      .populate('createdBy', 'name')
+      .sort({ totalMarks: -1, teamName: 1 });
     res.json(teams);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-// Public - Get teams by phase
-router.get('/phase/:phase', async (req, res) => {
-  try {
-    const teams = await Team.find({ phase: req.params.phase })
-      .populate('evaluatedBy', 'name')
-      .sort({ marks: -1, teamName: 1 });
-    res.json(teams);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-// Teacher only - Create or update team
+// Teacher only - Create team (just name)
 router.post('/', protect, async (req, res) => {
   try {
-    const { teamName, phase, marks, remarks } = req.body;
+    const { teamName } = req.body;
     
-    // Check if team already exists for this phase and room
+    // Check if team already exists in this room
     const existingTeam = await Team.findOne({
       teamName,
-      room: req.teacher.room,
-      phase
+      room: req.teacher.room
     });
 
     if (existingTeam) {
-      // Update existing team
-      existingTeam.marks = marks;
-      existingTeam.remarks = remarks;
-      existingTeam.evaluatedBy = req.teacher._id;
-      await existingTeam.save();
-      
-      const updated = await Team.findById(existingTeam._id).populate('evaluatedBy', 'name');
-      return res.json(updated);
+      return res.status(400).json({ message: 'Team already exists in this room' });
     }
 
-    // Create new team entry
     const team = await Team.create({
       teamName,
       room: req.teacher.room,
-      phase,
-      marks,
-      remarks,
-      evaluatedBy: req.teacher._id
+      createdBy: req.teacher._id
     });
 
-    const populated = await Team.findById(team._id).populate('evaluatedBy', 'name');
+    const populated = await Team.findById(team._id).populate('createdBy', 'name');
     res.status(201).json(populated);
   } catch (error) {
     if (error.code === 11000) {
-      return res.status(400).json({ message: 'Team already exists for this phase' });
+      return res.status(400).json({ message: 'Team already exists in this room' });
     }
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-// Teacher only - Update team
-router.put('/:id', protect, async (req, res) => {
+// Teacher only - Update Phase 1 marks
+router.put('/:id/phase1', protect, async (req, res) => {
   try {
     const team = await Team.findById(req.params.id);
     
@@ -85,12 +61,57 @@ router.put('/:id', protect, async (req, res) => {
     }
 
     const { marks, remarks } = req.body;
-    team.marks = marks !== undefined ? marks : team.marks;
-    team.remarks = remarks !== undefined ? remarks : team.remarks;
+    team.phase1Marks = marks !== undefined ? marks : team.phase1Marks;
+    team.phase1Remarks = remarks !== undefined ? remarks : team.phase1Remarks;
     
     await team.save();
-    const updated = await Team.findById(team._id).populate('evaluatedBy', 'name');
+    const updated = await Team.findById(team._id).populate('createdBy', 'name');
     res.json(updated);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Teacher only - Update Phase 2 marks
+router.put('/:id/phase2', protect, async (req, res) => {
+  try {
+    const team = await Team.findById(req.params.id);
+    
+    if (!team) {
+      return res.status(404).json({ message: 'Team not found' });
+    }
+
+    if (team.room !== req.teacher.room) {
+      return res.status(403).json({ message: 'Cannot modify other rooms data' });
+    }
+
+    const { marks, remarks } = req.body;
+    team.phase2Marks = marks !== undefined ? marks : team.phase2Marks;
+    team.phase2Remarks = remarks !== undefined ? remarks : team.phase2Remarks;
+    
+    await team.save();
+    const updated = await Team.findById(team._id).populate('createdBy', 'name');
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Teacher only - Delete team
+router.delete('/:id', protect, async (req, res) => {
+  try {
+    const team = await Team.findById(req.params.id);
+    
+    if (!team) {
+      return res.status(404).json({ message: 'Team not found' });
+    }
+
+    if (team.room !== req.teacher.room) {
+      return res.status(403).json({ message: 'Cannot delete other rooms teams' });
+    }
+
+    await Team.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Team deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }

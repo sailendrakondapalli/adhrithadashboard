@@ -14,8 +14,9 @@ API.interceptors.request.use((config) => {
 
 export const login = (credentials) => API.post('/auth/login', credentials);
 export const getTeams = () => API.get('/teams');
-export const getTeamsByPhase = (phase) => API.get(`/teams/phase/${phase}`);
 export const createTeam = (data) => API.post('/teams', data);
-export const updateTeam = (id, data) => API.put(`/teams/${id}`, data);
+export const updatePhase1 = (id, data) => API.put(`/teams/${id}/phase1`, data);
+export const updatePhase2 = (id, data) => API.put(`/teams/${id}/phase2`, data);
+export const deleteTeam = (id) => API.delete(`/teams/${id}`);
 
 export default API;
