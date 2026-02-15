@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const teamSchema = new mongoose.Schema({
-  teamName: { type: String, required: true },
+  teamName: { type: String, required: true, unique: true },
   room: { type: String, required: true },
   phase1Marks: { type: Number, default: 0 },
   phase1Remarks: { type: String, default: '' },
@@ -12,8 +12,8 @@ const teamSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-// Compound unique index to prevent duplicate teams in same room
-teamSchema.index({ teamName: 1, room: 1 }, { unique: true });
+// Unique index on teamName only (across all rooms)
+teamSchema.index({ teamName: 1 }, { unique: true });
 
 // Auto-calculate total marks before saving
 teamSchema.pre('save', function(next) {

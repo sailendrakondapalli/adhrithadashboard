@@ -21,14 +21,11 @@ router.post('/', protect, async (req, res) => {
   try {
     const { teamName } = req.body;
     
-    // Check if team already exists in this room
-    const existingTeam = await Team.findOne({
-      teamName,
-      room: req.teacher.room
-    });
+    // Check if team already exists (across all rooms)
+    const existingTeam = await Team.findOne({ teamName });
 
     if (existingTeam) {
-      return res.status(400).json({ message: 'Team already exists in this room' });
+      return res.status(400).json({ message: 'Team name already exists. Please choose a different name.' });
     }
 
     const team = await Team.create({
@@ -41,7 +38,7 @@ router.post('/', protect, async (req, res) => {
     res.status(201).json(populated);
   } catch (error) {
     if (error.code === 11000) {
-      return res.status(400).json({ message: 'Team already exists in this room' });
+      return res.status(400).json({ message: 'Team name already exists. Please choose a different name.' });
     }
     res.status(500).json({ message: 'Server error' });
   }
