@@ -6,14 +6,19 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0f0c29;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  color: #ffffff;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  position: relative;
+  z-index: 2;
 }
 
 @media (max-width: 768px) {
@@ -23,17 +28,28 @@ body {
 }
 
 .card {
-  background: white;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
 }
 
 @media (max-width: 768px) {
   .card {
     padding: 16px;
-    border-radius: 8px;
+    border-radius: 12px;
   }
 }
 
@@ -55,21 +71,26 @@ body {
 }
 
 .btn-primary {
-  background: #667eea;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
 
 .btn-primary:hover {
-  background: #5568d3;
+  background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  transform: translateY(-2px);
 }
 
 .btn-secondary {
-  background: #e2e8f0;
-  color: #334155;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-secondary:hover {
-  background: #cbd5e1;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .form-group {
@@ -80,7 +101,7 @@ body {
   display: block;
   margin-bottom: 6px;
   font-weight: 600;
-  color: #334155;
+  color: #e2e8f0;
 }
 
 .form-group input,
@@ -88,9 +109,12 @@ body {
 .form-group textarea {
   width: 100%;
   padding: 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   font-size: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  transition: all 0.3s ease;
 }
 
 .form-group input:focus,
@@ -98,6 +122,8 @@ body {
 .form-group textarea:focus {
   outline: none;
   border-color: #667eea;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .top-3 {
@@ -129,10 +155,22 @@ body {
 }
 
 .leaderboard-table th {
-  background: #f8fafc;
+  background: rgba(102, 126, 234, 0.2);
   font-weight: 600;
-  color: #334155;
+  color: #e2e8f0;
   white-space: nowrap;
+}
+
+.leaderboard-table td {
+  color: #e2e8f0;
+}
+
+.leaderboard-table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.leaderboard-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 @media (max-width: 768px) {
@@ -144,15 +182,24 @@ body {
 }
 
 .navbar {
-  background: white;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   padding: 16px 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
   flex-wrap: wrap;
   gap: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar h2 {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
 }
 
 @media (max-width: 768px) {
