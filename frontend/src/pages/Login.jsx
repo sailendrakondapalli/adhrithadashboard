@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { login } from '../services/api';
+import './Login.css';
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -32,88 +33,107 @@ function Login({ onLogin }) {
   };
 
   return (
-    <div className="container" style={{ maxWidth: '400px', marginTop: '100px' }}>
-      <div className="card">
-        <h1 style={{ marginBottom: '24px', textAlign: 'center', color: '#667eea' }}>
-          🏆 Hackathon Dashboard
+    <div className="login-container">
+      <div className="login-spotlight"></div>
+      
+      <div className="login-card">
+        {/* Event Logos */}
+        <div className="event-logos">
+          <div className="logo-section">
+            <div className="logo-placeholder aadhrita-logo">
+              <span className="logo-text">AADHRITA</span>
+            </div>
+          </div>
+          <div className="logo-divider"></div>
+          <div className="logo-section">
+            <div className="logo-placeholder hackerrank-logo">
+              <span className="logo-text">HackerRank</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="gold-divider"></div>
+
+        {/* Title */}
+        <h1 className="login-title">
+          <span className="title-main">Mentor Evaluation</span>
+          <span className="title-sub">Arena</span>
         </h1>
-        
-        <div className="tabs" style={{ justifyContent: 'center' }}>
+        <p className="login-subtitle">HACK24 Judging Control Room</p>
+
+        {/* Segmented Switch */}
+        <div className="segmented-switch">
           <button 
-            className={`tab ${!isStudent ? 'active' : ''}`}
+            className={`switch-option ${!isStudent ? 'active' : ''}`}
             onClick={() => setIsStudent(false)}
             type="button"
           >
-            Teacher Login
+            <span className="switch-icon">👨‍🏫</span>
+            Mentor Access
           </button>
           <button 
-            className={`tab ${isStudent ? 'active' : ''}`}
+            className={`switch-option ${isStudent ? 'active' : ''}`}
             onClick={() => setIsStudent(true)}
             type="button"
           >
+            <span className="switch-icon">🎓</span>
             Student View
           </button>
         </div>
 
+        {/* Login Form */}
         {!isStudent ? (
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label>Email</label>
+          <form onSubmit={handleSubmit} className="login-form">
+            <div className="form-group-premium">
+              <label>Email Address</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={loading}
+                placeholder="mentor@hack24.com"
               />
             </div>
-            <div className="form-group">
-              <label>Password</label>
+            <div className="form-group-premium">
+              <label>Access Code</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={loading}
+                placeholder="••••••••"
               />
             </div>
-            {error && <p style={{ color: 'red', marginBottom: '16px' }}>{error}</p>}
-            <button 
-              type="submit" 
-              className="btn btn-primary" 
-              style={{ width: '100%' }}
-              disabled={loading}
-            >
+            {error && <div className="error-message">{error}</div>}
+            <button type="submit" className="btn-premium-login" disabled={loading}>
               {loading ? (
-                <span>
-                  <span className="spinner"></span> Logging in...
-                </span>
+                <span><span className="spinner"></span> Authenticating...</span>
               ) : (
-                'Login as Teacher'
+                <span>Enter Evaluation Arena</span>
               )}
             </button>
           </form>
         ) : (
-          <div>
-            <p style={{ textAlign: 'center', marginBottom: '16px', color: '#64748b' }}>
-              View hackathon results and leaderboard
+          <div className="student-access">
+            <p className="access-description">
+              View live hackathon results, team rankings, and evaluation scores
             </p>
-            <button 
-              onClick={handleSubmit} 
-              className="btn btn-primary" 
-              style={{ width: '100%' }}
-              disabled={loading}
-            >
+            <button onClick={handleSubmit} className="btn-premium-login" disabled={loading}>
               {loading ? (
-                <span>
-                  <span className="spinner"></span> Loading...
-                </span>
+                <span><span className="spinner"></span> Loading...</span>
               ) : (
-                'Enter as Student'
+                <span>View Leaderboard</span>
               )}
             </button>
           </div>
         )}
+
+        <div className="login-footer">
+          <span className="footer-badge">🏆 HACK24</span>
+          <span className="footer-text">Powered by Aadhrita × HackerRank</span>
+        </div>
       </div>
     </div>
   );
