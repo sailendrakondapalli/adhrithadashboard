@@ -6,8 +6,9 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0F0F14;
   min-height: 100vh;
+  color: #EAEAEA;
 }
 
 .container {
@@ -23,11 +24,12 @@ body {
 }
 
 .card {
-  background: white;
+  background: #1A1A22;
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   margin-bottom: 20px;
+  border: 1px solid #2A2A35;
 }
 
 @media (max-width: 768px) {
@@ -55,21 +57,23 @@ body {
 }
 
 .btn-primary {
-  background: #667eea;
-  color: white;
+  background: #2EC866;
+  color: #0F0F14;
+  font-weight: 600;
 }
 
 .btn-primary:hover {
-  background: #5568d3;
+  background: #26b359;
 }
 
 .btn-secondary {
-  background: #e2e8f0;
-  color: #334155;
+  background: #2A2A35;
+  color: #EAEAEA;
+  border: 1px solid #2A2A35;
 }
 
 .btn-secondary:hover {
-  background: #cbd5e1;
+  background: #3A3A45;
 }
 
 .form-group {
@@ -80,7 +84,7 @@ body {
   display: block;
   margin-bottom: 6px;
   font-weight: 600;
-  color: #334155;
+  color: #EAEAEA;
 }
 
 .form-group input,
@@ -88,31 +92,28 @@ body {
 .form-group textarea {
   width: 100%;
   padding: 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #2A2A35;
   border-radius: 6px;
   font-size: 14px;
+  background: #1A1A22;
+  color: #EAEAEA;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #2EC866;
 }
 
 .top-3 {
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  background: linear-gradient(135deg, #C9A227 0%, #B91C1C 100%);
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.02); }
-}
-
-.table-responsive {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .leaderboard-table {
@@ -125,14 +126,22 @@ body {
 .leaderboard-table td {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #2A2A35;
 }
 
 .leaderboard-table th {
-  background: #f8fafc;
+  background: #2A2A35;
   font-weight: 600;
-  color: #334155;
+  color: #EAEAEA;
   white-space: nowrap;
+}
+
+.leaderboard-table td {
+  color: #B5B5B5;
+}
+
+.leaderboard-table td strong {
+  color: #EAEAEA;
 }
 
 @media (max-width: 768px) {
@@ -144,15 +153,20 @@ body {
 }
 
 .navbar {
-  background: white;
+  background: #1A1A22;
   padding: 16px 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
   flex-wrap: wrap;
   gap: 10px;
+  border-bottom: 2px solid #B91C1C;
+}
+
+.navbar h2 {
+  color: #EAEAEA;
 }
 
 @media (max-width: 768px) {
@@ -175,18 +189,19 @@ body {
 .tab {
   padding: 10px 20px;
   border: none;
-  background: white;
+  background: #2A2A35;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s;
   flex: 1;
   min-width: 100px;
+  color: #B5B5B5;
 }
 
 .tab.active {
-  background: #667eea;
-  color: white;
+  background: #B91C1C;
+  color: #EAEAEA;
 }
 
 @media (max-width: 768px) {
@@ -246,7 +261,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(15, 15, 20, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -255,13 +270,18 @@ body {
 }
 
 .modal-content {
-  background: white;
+  background: #1A1A22;
   border-radius: 12px;
   padding: 24px;
   max-width: 500px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
+  border: 1px solid #2A2A35;
+}
+
+.modal-content h3 {
+  color: #EAEAEA;
 }
 
 @media (max-width: 768px) {
@@ -272,10 +292,37 @@ body {
 
 /* Danger Button */
 .btn-danger {
-  background: #dc3545;
-  color: white;
+  background: #B91C1C;
+  color: #EAEAEA;
 }
 
 .btn-danger:hover {
-  background: #c82333;
+  background: #991515;
+}
+
+/* Aadhrita Theme Accents */
+h1, h2, h3 {
+  color: #EAEAEA;
+}
+
+p {
+  color: #B5B5B5;
+}
+
+.accent-crimson {
+  color: #B91C1C;
+}
+
+.accent-gold {
+  color: #C9A227;
+}
+
+.accent-green {
+  color: #2EC866;
+}
+
+/* Table responsive wrapper */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
