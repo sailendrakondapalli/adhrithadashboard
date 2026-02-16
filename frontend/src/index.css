@@ -20,11 +20,11 @@ body::before {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(ellipse at 20% 50%, rgba(185, 28, 28, 0.3) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 50%, rgba(46, 200, 102, 0.3) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(201, 162, 39, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 50%, rgba(185, 28, 28, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(46, 200, 102, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(201, 162, 39, 0.3) 0%, transparent 50%),
     linear-gradient(135deg, #0F0F14 0%, #1A1A22 100%);
-  opacity: 0.8;
+  opacity: 1;
   z-index: -1;
   animation: bgShift 20s ease infinite;
 }
@@ -49,7 +49,7 @@ body::before {
 }
 
 .card {
-  background: rgba(30, 30, 40, 0.95);
+  background: rgba(30, 30, 40, 0.98);
   backdrop-filter: blur(10px);
   border-radius: 12px;
   padding: 24px;
@@ -61,6 +61,7 @@ body::before {
 .card h3 {
   color: #FFFFFF;
   margin-bottom: 16px;
+  font-weight: 700;
 }
 
 @media (max-width: 768px) {
@@ -145,13 +146,19 @@ body::before {
 }
 
 .top-3 {
-  background: linear-gradient(135deg, #C9A227 0%, #B91C1C 100%);
+  background: linear-gradient(135deg, rgba(46, 200, 102, 0.15) 0%, rgba(46, 200, 102, 0.05) 100%);
+  border-left: 3px solid #2EC866;
   animation: pulse 2s infinite;
+}
+
+.top-3 td {
+  color: #FFFFFF !important;
+  font-weight: 600;
 }
 
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+  50% { transform: scale(1.01); }
 }
 
 .leaderboard-table {
@@ -175,16 +182,19 @@ body::before {
 }
 
 .leaderboard-table td {
-  color: #D0D0D0;
+  color: #E0E0E0;
 }
 
 .leaderboard-table td strong {
   color: #FFFFFF;
   font-weight: 700;
+  font-size: 16px;
 }
 
 .leaderboard-table tbody tr:hover {
-  background: rgba(46, 200, 102, 0.05);
+  background: rgba(46, 200, 102, 0.08);
+  transform: translateX(4px);
+  transition: all 0.3s ease;
 }
 
 @media (max-width: 768px) {
@@ -196,7 +206,7 @@ body::before {
 }
 
 .navbar {
-  background: rgba(30, 30, 40, 0.95);
+  background: rgba(30, 30, 40, 0.98);
   backdrop-filter: blur(10px);
   padding: 16px 24px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
@@ -206,7 +216,7 @@ body::before {
   margin-bottom: 20px;
   flex-wrap: wrap;
   gap: 10px;
-  border-bottom: 3px solid #B91C1C;
+  border-bottom: 3px solid #2EC866;
   border-radius: 8px;
 }
 
