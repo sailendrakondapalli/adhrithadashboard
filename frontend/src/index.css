@@ -13,15 +13,10 @@ body {
     radial-gradient(ellipse at 0% 100%, rgba(46, 200, 102, 0.3) 0%, transparent 50%),
     linear-gradient(135deg, #0a0a0f 0%, #1a1520 25%, #0f1419 50%, #1a1520 75%, #0a0a0f 100%);
   background-size: 100% 100%;
+  background-attachment: fixed;
   min-height: 100vh;
   color: #FFFFFF;
   position: relative;
-  animation: gradientFlow 15s ease infinite;
-}
-
-@keyframes gradientFlow {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
 }
 
 body::before {
@@ -37,12 +32,6 @@ body::before {
     radial-gradient(circle at 50% 50%, rgba(201, 162, 39, 0.1) 0%, transparent 50%);
   opacity: 1;
   z-index: -1;
-  animation: bgShift 20s ease infinite;
-}
-
-@keyframes bgShift {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.1) rotate(2deg); }
 }
 
 .container {
@@ -204,8 +193,7 @@ body::before {
 
 .leaderboard-table tbody tr:hover {
   background: rgba(46, 200, 102, 0.08);
-  transform: translateX(4px);
-  transition: all 0.3s ease;
+  transition: background 0.3s ease;
 }
 
 @media (max-width: 768px) {
