@@ -26,12 +26,22 @@ function Charts({ teams }) {
       <h3 style={{ marginBottom: '20px' }}>{title}</h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="teamName" angle={-45} textAnchor="end" height={100} />
-          <YAxis />
-          <Tooltip />
+          <CartesianGrid strokeDasharray="3 3" stroke="#3A3A45" />
+          <XAxis 
+            dataKey="teamName" 
+            angle={-45} 
+            textAnchor="end" 
+            height={100}
+            stroke="#B5B5B5"
+          />
+          <YAxis stroke="#B5B5B5" />
           <Legend />
-          <Bar dataKey="marks" fill={color} />
+          <Bar 
+            dataKey="marks" 
+            fill={color}
+            isAnimationActive={false}
+            cursor="default"
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>

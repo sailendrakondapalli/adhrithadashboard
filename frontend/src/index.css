@@ -390,3 +390,21 @@ p {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
+
+/* Chart styles - disable interactions */
+.recharts-bar-rectangle {
+  cursor: default !important;
+}
+
+.recharts-bar-rectangle:hover {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+.recharts-wrapper {
+  cursor: default !important;
+}
+
+.recharts-surface {
+  cursor: default !important;
+}
